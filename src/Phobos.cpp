@@ -144,8 +144,8 @@ DEFINE_HOOK(0x5FACDF, OptionsClass_LoadSettings_LoadPhobosSettings, 0x5)
 
 	// ToolTips
 	{
-		Phobos::UI::ExtendedToolTips =
-			pINI->ReadBool(TOOLTIPS_SECTION, "ExtendedToolTips", true);
+		// Phobos::UI::ExtendedToolTips =
+		// 	pINI->ReadBool(TOOLTIPS_SECTION, "ExtendedToolTips", true);
 
 		Phobos::UI::MaxToolTipWidth =
 			pINI->ReadInteger(TOOLTIPS_SECTION, "MaxWidth", 0);
@@ -165,8 +165,8 @@ DEFINE_HOOK(0x5FACDF, OptionsClass_LoadSettings_LoadPhobosSettings, 0x5)
 
 	// Sidebar
 	{
-		Phobos::UI::ShowHarvesterCounter =
-			pINI->ReadBool(SIDEBAR_SECTION, "HarvesterCounter.Show", true);
+		// Phobos::UI::ShowHarvesterCounter =
+		// 	pINI->ReadBool(SIDEBAR_SECTION, "HarvesterCounter.Show", true);
 
 		pINI->ReadString(SIDEBAR_SECTION, "HarvesterCounter.Label", NONE_STR, Phobos::readBuffer);
 		Phobos::UI::HarvesterLabel = GeneralUtils::LoadStringOrDefault(Phobos::readBuffer, L"\u26cf"); // ⛏
@@ -179,8 +179,8 @@ DEFINE_HOOK(0x5FACDF, OptionsClass_LoadSettings_LoadPhobosSettings, 0x5)
 		Phobos::UI::ShowProducingProgress =
 			pINI->ReadBool(SIDEBAR_SECTION, "ProducingProgress.Show", false);
 
-		Phobos::UI::ShowPowerDelta =
-			pINI->ReadBool(SIDEBAR_SECTION, "PowerDelta.Show", true);
+		// Phobos::UI::ShowPowerDelta =
+		// 	pINI->ReadBool(SIDEBAR_SECTION, "PowerDelta.Show", true);
 
 		Phobos::UI::PowerDelta_ConditionYellow =
 			pINI->ReadDouble(SIDEBAR_SECTION, "PowerDelta.ConditionYellow", Phobos::UI::PowerDelta_ConditionYellow);
