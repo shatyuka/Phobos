@@ -24,6 +24,8 @@ public:
 	class ExtData final : public Extension<RulesClass>
 	{
 	public:
+		ValueableVector<TechnoTypeClass*> HarvesterTypes;
+
 		Valueable<Vector3D<int>> Pips_Shield;
 		Valueable<Vector3D<int>> Pips_Shield_Buildings;
 		Valueable<int> RadApplicationDelay_Building;
@@ -34,6 +36,7 @@ public:
 			, Pips_Shield_Buildings({ -1,-1,-1 })
 			, RadApplicationDelay_Building(0)
 			, MissingCameo("xxicon.shp")
+			, HarvesterTypes()
 		{ }
 
 		virtual ~ExtData() = default;

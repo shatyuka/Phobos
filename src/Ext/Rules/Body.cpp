@@ -113,6 +113,7 @@ void RulesExt::ExtData::Serialize(T& Stm)
 		.Process(this->Pips_Shield_Buildings)
 		.Process(this->RadApplicationDelay_Building)
 		.Process(this->MissingCameo)
+		.Process(this->HarvesterTypes)
 		;
 }
 
