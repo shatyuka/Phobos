@@ -52,7 +52,7 @@ DEFINE_HOOK(0x641B41, LoadingScreen_SkipPreview, 0x8)
 DEFINE_HOOK(0x4A25E0, CreditsClass_GraphicLogic_HarvesterCounter, 0x7)
 {
 	auto const pPlayer = HouseClass::Player();
-	if (!pPlayer || pPlayer->Defeated)
+	if (pPlayer->Defeated)
 		return 0;
 
 	if (Phobos::UI::ShowHarvesterCounter)
@@ -85,20 +85,28 @@ DEFINE_HOOK(0x4A25E0, CreditsClass_GraphicLogic_HarvesterCounter, 0x7)
 	{
 		auto pSideExt = SideExt::ExtMap.Find(SideClass::Array->GetItem(pPlayer->SideIndex));
 		wchar_t counter[0x20];
-		auto delta = pPlayer->PowerOutput - pPlayer->PowerDrain;
 
-		double percent = pPlayer->PowerOutput != 0
-			? (double)pPlayer->PowerDrain / (double)pPlayer->PowerOutput : pPlayer->PowerDrain != 0
-			? Phobos::UI::PowerDelta_ConditionRed : Phobos::UI::PowerDelta_ConditionYellow;
+		ColorStruct clrToolTip;
 
-		ColorStruct clrToolTip = percent < Phobos::UI::PowerDelta_ConditionYellow
-			? pSideExt->Sidebar_PowerDelta_Green : LESS_EQUAL(percent, Phobos::UI::PowerDelta_ConditionRed)
-			? pSideExt->Sidebar_PowerDelta_Yellow : pSideExt->Sidebar_PowerDelta_Red;
+		if (pPlayer->PowerBlackoutTimer.InProgress())
+		{
+			clrToolTip = pSideExt->Sidebar_PowerDelta_Grey;
+			swprintf_s(counter, L"%ls", Phobos::UI::PowerBlackoutLabel);
+		}
+		else
+		{
+			int delta = pPlayer->PowerOutput - pPlayer->PowerDrain;
 
-		auto TextFlags = static_cast<TextPrintType>(static_cast<int>(TextPrintType::UseGradPal | TextPrintType::Metal12)
-				| static_cast<int>(pSideExt->Sidebar_PowerDelta_Align.Get()));
+			double percent = pPlayer->PowerOutput != 0
+				? (double)pPlayer->PowerDrain / (double)pPlayer->PowerOutput : pPlayer->PowerDrain != 0
+				? Phobos::UI::PowerDelta_ConditionRed * 2.f : Phobos::UI::PowerDelta_ConditionYellow;
 
-		swprintf_s(counter, L"%ls%+d", Phobos::UI::PowerLabel, delta);
+			clrToolTip = percent < Phobos::UI::PowerDelta_ConditionYellow
+				? pSideExt->Sidebar_PowerDelta_Green : LESS_EQUAL(percent, Phobos::UI::PowerDelta_ConditionRed)
+				? pSideExt->Sidebar_PowerDelta_Yellow : pSideExt->Sidebar_PowerDelta_Red;
+
+			swprintf_s(counter, L"%ls%+d", Phobos::UI::PowerLabel, delta);
+		}
 
 		Point2D vPos = {
 			DSurface::Sidebar->GetWidth() / 2 - 70 + pSideExt->Sidebar_PowerDelta_Offset.Get().X,
@@ -107,6 +115,9 @@ DEFINE_HOOK(0x4A25E0, CreditsClass_GraphicLogic_HarvesterCounter, 0x7)
 
 		RectangleStruct vRect = { 0, 0, 0, 0 };
 		DSurface::Sidebar->GetRect(&vRect);
+
+		auto const TextFlags = static_cast<TextPrintType>(static_cast<int>(TextPrintType::UseGradPal | TextPrintType::Metal12)
+				| static_cast<int>(pSideExt->Sidebar_PowerDelta_Align.Get()));
 
 		DSurface::Sidebar->DrawText(counter, &vRect, &vPos, Drawing::RGB2DWORD(clrToolTip), 0, TextFlags);
 	}
